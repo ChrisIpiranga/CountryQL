@@ -3,8 +3,16 @@ import ReactCountryFlag from "react-country-flag";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { toast } from "react-toastify";
+import NotAvailableInfo from "../Components/NotAvailable";
 
 function CountryInfo(props) {
+
+  const [countryLoad, setCountryLoad] = useState(props);
+
+  useEffect(() => {
+    setCountryLoad(props);
+  }, [props]);
+
   function loadCountry(countryCode) {
     return gql`
       {
@@ -23,7 +31,9 @@ function CountryInfo(props) {
     `;
   }
 
-  const { error, loading, data } = useQuery(loadCountry(props.countryCode));
+  const { error, loading, data } = useQuery(
+    loadCountry(countryLoad.countryCode)
+  );
 
   const [country, setCountry] = useState([]);
 
@@ -31,9 +41,9 @@ function CountryInfo(props) {
     if (data) {
       setCountry(data.country);
 
-      if (props.countryCode === "BY") {
+      if (countryLoad.countryCode === "BY") {
         toast.success("hi Tatsiana :)");
-      } else if (props.countryCode === "DE") {
+      } else if (countryLoad.countryCode === "DE") {
         toast.success("hi Marc :)");
       }
     }
@@ -54,7 +64,7 @@ function CountryInfo(props) {
         <div className="countryInfoValue">
           <ReactCountryFlag
             className="countryInfoFlag"
-            countryCode={props.countryCode}
+            countryCode={countryLoad.countryCode}
             svg
           />
         </div>
@@ -65,24 +75,30 @@ function CountryInfo(props) {
       </div>
       <div className="countryInfoRow">
         <div className="countryInfoLabel">Capital:</div>
-        <div className="countryInfoValue">{country.capital}</div>
+        <div className="countryInfoValue">
+          {country.capital ? country.capital : <NotAvailableInfo />}
+        </div>
       </div>
       <div className="countryInfoRow">
         <div className="countryInfoLabel">Currency:</div>
-        <div className="countryInfoValue">{country.currency}</div>
+        <div className="countryInfoValue">
+          {country.currency ? country.currency : <NotAvailableInfo />}
+        </div>
       </div>
-      {country.languages && (
-        <div className="countryInfoRow">
-          <div className="countryInfoLabel">Language(s):</div>
-          <div className="countryInfoValue">
-            {country.languages.map((language, index) => (
+      <div className="countryInfoRow">
+        <div className="countryInfoLabel">Language(s):</div>
+        <div className="countryInfoValue">
+          {country.languages && country.languages.length ? (
+            country.languages.map((language, index) => (
               <div key={index}>
                 {language.name} ({language.code})
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <NotAvailableInfo />
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
