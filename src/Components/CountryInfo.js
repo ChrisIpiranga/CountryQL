@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
+import { toast } from "react-toastify";
 
 function CountryInfo(props) {
   function loadCountry(countryCode) {
@@ -29,8 +30,12 @@ function CountryInfo(props) {
   useEffect(() => {
     if (data) {
       setCountry(data.country);
-      console.log(data.country
-      );
+
+      if (props.countryCode === "BY") {
+        toast.success("hi Tatsiana :)");
+      } else if (props.countryCode === "DE") {
+        toast.success("hi Marc :)");
+      }
     }
   }, [data]);
 
