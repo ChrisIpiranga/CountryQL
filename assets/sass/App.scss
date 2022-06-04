@@ -1,4 +1,85 @@
 @import 'reset';
+@import 'variables';
 
-.App {
+body {
+
+  .loading {
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .noSelected {
+    padding: 20px 0 0 0;
+    text-align: center;
+    font-size: 12px;
+    width: 100%;
+    opacity: 0.3;
+  }
+
+  .container {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+
+    .countryList {
+      padding: 20px;
+      margin: 40px 10px;
+      background-color: $gray;
+      border-radius: 5px;
+      border: solid 1px $darkgray;
+      box-shadow: 0 0 20px rgba($black, 0.2);
+      width: 450px;
+      max-width: 100%;
+
+      .countryLabel {
+        padding: 5px 0;
+        display: block;
+      }
+
+      select {
+        padding: 5px;
+        font-size: 16px;
+        width: 100%;
+      }
+
+      .countryInfo {
+
+        padding-top: 10px;
+
+        .countryInfoRow {
+
+          padding: 4px;
+
+          &:nth-child(odd) {
+            background-color: $white;
+          }
+
+          .countryInfoLabel, .countryInfoValue {
+            width: 50%;
+            padding: 5px 0 0 0;
+            display: inline-block;
+            vertical-align: top;
+          }
+
+          .countryInfoLabel {
+            text-align: right;
+            padding-right: 3px;
+          }
+
+          .countryInfoValue {
+            text-align: left;
+            padding-left: 3px;
+
+            .countryInfoFlag {
+              width: 50px !important;
+              height: auto !important;
+            }
+          }
+        }
+      }
+    }
+  }
 }
