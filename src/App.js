@@ -2,6 +2,7 @@ import "./css/App.css";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import GetCountries from "./Components/GetCountries";
+import { ToastContainer } from "react-toastify";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -11,6 +12,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <div className="container">
+      <ToastContainer autoClose={1500} theme="dark" position="top-center" />
       <ApolloProvider client={client}>
         <GetCountries />
       </ApolloProvider>

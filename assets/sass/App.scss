@@ -1,3 +1,4 @@
+@import "~react-toastify/dist/ReactToastify.css";
 @import 'reset';
 @import 'variables';
 
@@ -21,7 +22,7 @@ body {
 
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
 
     .countryList {
