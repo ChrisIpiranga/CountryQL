@@ -7,10 +7,10 @@ import NotAvailableInfo from "../Components/NotAvailable";
 
 function CountryInfo(props) {
 
-  const [countryLoad, setCountryLoad] = useState(props);
+  const [countryCode, setCountryCode] = useState(props);
 
   useEffect(() => {
-    setCountryLoad(props);
+    setCountryCode(props);
   }, [props]);
 
   function loadCountry(countryCode) {
@@ -32,7 +32,7 @@ function CountryInfo(props) {
   }
 
   const { error, loading, data } = useQuery(
-    loadCountry(countryLoad.countryCode)
+    loadCountry(countryCode.countryCode)
   );
 
   const [country, setCountry] = useState([]);
@@ -41,13 +41,13 @@ function CountryInfo(props) {
     if (data) {
       setCountry(data.country);
 
-      if (countryLoad.countryCode === "BY") {
+      if (countryCode.countryCode === "BY") {
         toast.success("hi Tatsiana :)");
-      } else if (countryLoad.countryCode === "DE") {
+      } else if (countryCode.countryCode === "DE") {
         toast.success("hi Marc :)");
       }
     }
-  }, [data]);
+  }, [data, countryCode]);
 
   if (loading || error) {
     return <p className="loading">{error ? error.message : "Loading Country details..."}</p>;
@@ -57,21 +57,25 @@ function CountryInfo(props) {
     <div className="countryInfo">
       <div className="countryInfoRow">
         <div className="countryInfoLabel">Name:</div>
-        <div className="countryInfoValue">{country.name}</div>
+        <div className="countryInfoValue">
+          {country.name ? country.name : <NotAvailableInfo />}
+        </div>
       </div>
       <div className="countryInfoRow">
         <div className="countryInfoLabel">Flag:</div>
         <div className="countryInfoValue">
           <ReactCountryFlag
             className="countryInfoFlag"
-            countryCode={countryLoad.countryCode}
+            countryCode={countryCode.countryCode}
             svg
           />
         </div>
       </div>
       <div className="countryInfoRow">
         <div className="countryInfoLabel">Native:</div>
-        <div className="countryInfoValue">{country.native}</div>
+        <div className="countryInfoValue">
+          {country.native ? country.native : <NotAvailableInfo />}
+        </div>
       </div>
       <div className="countryInfoRow">
         <div className="countryInfoLabel">Capital:</div>
