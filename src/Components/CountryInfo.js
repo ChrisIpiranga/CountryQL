@@ -3,17 +3,17 @@ import ReactCountryFlag from "react-country-flag";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { toast } from "react-toastify";
-import NotAvailableInfo from "../Components/NotAvailable";
 
 function CountryInfo(props) {
 
-  const [countryCode, setCountryCode] = useState(props);
+  const [countryInfo, setCountryInfo] = useState([]);
+  const [countryCode, setCountryCode] = useState("");
 
   useEffect(() => {
-    setCountryCode(props);
-  }, [props]);
+    setCountryCode(props.countryCode);
+  }, [props.countryCode]);
 
-  function loadCountry(countryCode) {
+  const loadCountry = (countryCode) => {
     return gql`
       {
         country (code: "${countryCode}") {
@@ -31,78 +31,85 @@ function CountryInfo(props) {
     `;
   }
 
-  const { error, loading, data } = useQuery(
-    loadCountry(countryCode.countryCode)
-  );
+  const isCountryCodeValid = () => {
+    return countryCode === "";
+  };
 
-  const [country, setCountry] = useState([]);
+  const { error, loading, data } = useQuery(loadCountry(countryCode), {
+    skip: isCountryCodeValid(),
+  });
 
   useEffect(() => {
     if (data) {
-      setCountry(data.country);
 
-      if (countryCode.countryCode === "BY") {
+      setCountryInfo(data.country);
+
+      // Easter Egg :D #################
+      if (countryCode === "BY") {
         toast.success("hi Tatsiana :)");
-      } else if (countryCode.countryCode === "DE") {
+      } else if (countryCode === "DE") {
         toast.success("hi Marc :)");
       }
+      //################################
     }
-  }, [data, countryCode]);
+  }, [countryCode, data]);
 
   if (loading || error) {
     return <p className="loading">{error ? error.message : "Loading Country details..."}</p>;
   }
 
+  if (!Object.keys(countryInfo).length) return;
+
   return (
     <div className="countryInfo">
       <div className="countryInfoRow">
-        <div className="countryInfoLabel">Name:</div>
-        <div className="countryInfoValue">
-          {country.name ? country.name : <NotAvailableInfo />}
-        </div>
+        <div>Name:</div>
+        <div>{countryInfo.name}</div>
       </div>
       <div className="countryInfoRow">
-        <div className="countryInfoLabel">Flag:</div>
-        <div className="countryInfoValue">
+        <div>Flag:</div>
+        <div>
           <ReactCountryFlag
             className="countryInfoFlag"
-            countryCode={countryCode.countryCode}
+            countryCode={countryCode}
             svg
           />
         </div>
       </div>
-      <div className="countryInfoRow">
-        <div className="countryInfoLabel">Native:</div>
-        <div className="countryInfoValue">
-          {country.native ? country.native : <NotAvailableInfo />}
+
+      {countryInfo.native && (
+        <div className="countryInfoRow">
+          <div>Native:</div>
+          <div>{countryInfo.native}</div>
         </div>
-      </div>
-      <div className="countryInfoRow">
-        <div className="countryInfoLabel">Capital:</div>
-        <div className="countryInfoValue">
-          {country.capital ? country.capital : <NotAvailableInfo />}
+      )}
+
+      {countryInfo.capital && (
+        <div className="countryInfoRow">
+          <div>Capital:</div>
+          <div>{countryInfo.capital}</div>
         </div>
-      </div>
-      <div className="countryInfoRow">
-        <div className="countryInfoLabel">Currency:</div>
-        <div className="countryInfoValue">
-          {country.currency ? country.currency : <NotAvailableInfo />}
+      )}
+
+      {countryInfo.currency && (
+        <div className="countryInfoRow">
+          <div>Currency:</div>
+          <div>{countryInfo.currency}</div>
         </div>
-      </div>
-      <div className="countryInfoRow">
-        <div className="countryInfoLabel">Language(s):</div>
-        <div className="countryInfoValue">
-          {country.languages && country.languages.length ? (
-            country.languages.map((language, index) => (
+      )}
+
+      {countryInfo.languages.length > 0 && (
+        <div className="countryInfoRow">
+          <div>Language(s):</div>
+          <div>
+            {countryInfo.languages.map((language, index) => (
               <div key={index}>
-                {language.name} ({language.code})
+                {language.name} [{language.code}]
               </div>
-            ))
-          ) : (
-            <NotAvailableInfo />
-          )}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

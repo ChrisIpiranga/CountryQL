@@ -5,7 +5,7 @@
 body {
 
   .loading {
-    padding: 20px 0;
+    padding: 20px 0 0 0;
     width: 100%;
     text-align: center;
   }
@@ -58,33 +58,34 @@ body {
             background-color: $white;
           }
 
-          .countryInfoLabel, .countryInfoValue {
+          > div {
+
+            &:first-child {
+              text-align: right;
+              padding-right: 3px;
+            }
+
+            &:last-child {
+              text-align: left;
+              padding-left: 3px;
+              word-wrap: break-word;
+
+              .countryInfoFlag {
+                width: 50px !important;
+                height: auto !important;
+              }
+
+              .notVailableInfo {
+                font-size: 12px;
+                opacity: 0.5;
+                padding-top: 2px;
+              }
+            }
+
             width: 50%;
             padding: 5px 0 0 0;
             display: inline-block;
             vertical-align: top;
-          }
-
-          .countryInfoLabel {
-            text-align: right;
-            padding-right: 3px;
-          }
-
-          .countryInfoValue {
-            text-align: left;
-            padding-left: 3px;
-            word-wrap: break-word;
-
-            .countryInfoFlag {
-              width: 50px !important;
-              height: auto !important;
-            }
-
-            .notVailableInfo {
-              font-size: 12px;
-              opacity: 0.5;
-              padding-top: 2px;
-            }
           }
         }
       }
