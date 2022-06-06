@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { useQuery } from "@apollo/client";
-import { gql } from "@apollo/client";
 import { toast } from "react-toastify";
+import { LOAD_COUNTRY } from "../GraphQL/Country";
 
 function CountryInfo(props) {
 
@@ -13,29 +13,11 @@ function CountryInfo(props) {
     setCountryCode(props.countryCode);
   }, [props.countryCode]);
 
-  const loadCountry = (countryCode) => {
-    return gql`
-      {
-        country (code: "${countryCode}") {
-          name
-          native
-          capital
-          emoji
-          currency
-          languages {
-            code
-            name
-          }
-        }
-      }
-    `;
-  }
-
   const isCountryCodeValid = () => {
     return countryCode === "";
   };
 
-  const { error, loading, data } = useQuery(loadCountry(countryCode), {
+  const { error, loading, data } = useQuery(LOAD_COUNTRY(countryCode), {
     skip: isCountryCodeValid(),
   });
 

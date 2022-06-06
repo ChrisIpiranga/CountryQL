@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { LOAD_COUNTRIES } from '../GraphQL/Countrie';
-
 import CountryInfo from './CountryInfo';
 
 function GetCountries() {
